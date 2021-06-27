@@ -18,6 +18,7 @@ func (a *article) handle(tag string, value string) {
 	switch tag {
 	case "h1":
 		a.close()
+		fmt.Printf("  %s: %s\n", tag, value)
 		a.renew(value)
 	case "h3":
 		a.flush()
@@ -28,12 +29,10 @@ func (a *article) handle(tag string, value string) {
 }
 
 func (a *article) renew(value string) {
-	if strings.Contains(value, "radio") {
-		fileName := decideFileName(value)
-		fmt.Printf("-> %s\n", fileName)
-		a.out = createWriter(fileName)
-		fmt.Fprintf(a.out, "%s\n\n", value)
-	}
+	fileName := decideFileName(value)
+	fmt.Printf("    -> %s\n", fileName)
+	a.out = createWriter(fileName)
+	fmt.Fprintf(a.out, "%s\n\n", value)
 }
 
 var regexDateTitle = regexp.MustCompile(`(\d+)\.(\d+)\.(\d+)`)

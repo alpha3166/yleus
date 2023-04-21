@@ -16,7 +16,7 @@ type article struct {
 func (a *article) handle(tag string, value string) {
 	value = strings.TrimSpace(value)
 	switch tag {
-	case "h1":
+	case "h2":
 		a.close()
 		fmt.Printf("  %s: %s\n", tag, value)
 		a.renew(value)
@@ -40,7 +40,7 @@ var regexDateTitle = regexp.MustCompile(`(\d+)\.(\d+)\.(\d+)`)
 func decideFileName(value string) string {
 	tokens := regexDateTitle.FindStringSubmatch(value)
 	if len(tokens) != 4 {
-		panic(fmt.Sprintf("Illegal date format in <h1>: %v", value))
+		panic(fmt.Sprintf("Illegal date format in <h2>: %v", value))
 	}
 	fileName := fmt.Sprintf("%04s%02s%02s.txt", tokens[3], tokens[2], tokens[1])
 	return fileName

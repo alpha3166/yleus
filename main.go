@@ -12,7 +12,7 @@ import (
 
 func main() {
 	if len(os.Args) < 2 {
-		process("https://yle.fi/uutiset/osasto/selkouutiset/")
+		process("https://yle.fi/selkouutiset")
 	} else {
 		for _, target := range os.Args[1:] {
 			process(target)

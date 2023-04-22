@@ -45,7 +45,8 @@ func process(target string) {
 	in.Close()
 
 	article := article{}
-	doc.Find("article.yle__article").Find("h2, h3, p").Each(func(i int, s *goquery.Selection) {
+	article.fillDefaults()
+	doc.Find("article.yle__article").Find("h1, h2, h3, p").Each(func(i int, s *goquery.Selection) {
 		article.handle(goquery.NodeName(s), s.Text())
 	})
 	article.close()

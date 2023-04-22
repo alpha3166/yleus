@@ -11,16 +11,27 @@ import (
 type article struct {
 	out        io.WriteCloser
 	paragraphs []string
+	pageHeader string
+	headline   string
+}
+
+func (a *article) fillDefaults() {
+	a.pageHeader = "h2"
+	a.headline = "h3"
 }
 
 func (a *article) handle(tag string, value string) {
+	if tag == "h1" {
+		a.pageHeader = "h1"
+		a.headline = "h2"
+	}
 	value = strings.TrimSpace(value)
 	switch tag {
-	case "h2":
+	case a.pageHeader:
 		a.close()
 		fmt.Printf("  %s: %s\n", tag, value)
 		a.renew(value)
-	case "h3":
+	case a.headline:
 		a.flush()
 		a.accumulate(value)
 	default: // <p>
@@ -40,7 +51,7 @@ var regexDateTitle = regexp.MustCompile(`(\d+)\.(\d+)\.(\d+)`)
 func decideFileName(value string) string {
 	tokens := regexDateTitle.FindStringSubmatch(value)
 	if len(tokens) != 4 {
-		panic(fmt.Sprintf("Illegal date format in <h2>: %v", value))
+		panic(fmt.Sprintf("Illegal date format in page header: %v", value))
 	}
 	fileName := fmt.Sprintf("%04s%02s%02s.txt", tokens[3], tokens[2], tokens[1])
 	return fileName

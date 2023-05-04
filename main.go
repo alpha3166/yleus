@@ -47,7 +47,11 @@ func process(target string) {
 	article := article{}
 	article.fillDefaults()
 	doc.Find("article.yle__article").Find("h1, h2, h3, p").Each(func(i int, s *goquery.Selection) {
-		article.handle(goquery.NodeName(s), s.Text())
+		if goquery.NodeName(s) == "p" && goquery.NodeName(s.Parent()) == "figure" {
+			// ignore
+		} else {
+			article.handle(goquery.NodeName(s), s.Text())
+		}
 	})
 	article.close()
 }
